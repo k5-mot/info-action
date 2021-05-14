@@ -1,0 +1,41 @@
+name: "info-action"
+description: "GitHub Action for Getting information of repository."
+
+outputs:
+  owner:
+    description: "Owner of repository"
+    value: ${{ steps.info_repos.outputs.owner }}
+  repository:
+    description: "Repository name"
+    value: ${{ steps.info_repos.outputs.repository }}
+  version:
+    description: "Version of repository"
+    value: ${{ steps.info_repos.outputs.version }}
+  version_hp:
+    description: "Version(Hyphen) of repository"
+    value: ${{ steps.info_repos.outputs.version_hp }}
+  version_ub:
+    description: "Version(Underbar) of repository"
+    value: ${{ steps.info_repos.outputs.version_ub }}
+  release:
+    description: "Name for release"
+    value: ${{ steps.info_repos.outputs.release }}
+
+runs: 
+  using: "composite"
+  steps: 
+    - shell: bash
+      id: info_repos
+      run: |
+        OWNER=$(echo ${{ github.repository_owner }})
+        REPOSITORY=$(echo ${{ github.repository }} | sed -e "s/$OWNER\///g")
+        VERSION=$(echo ${{ github.ref }} | sed -e "s/refs\/tags\///g")
+        VERSION_HP=$(echo ${VERSION} | sed -e "s/\./-/g")
+        VERSION_UB=$(echo ${VERSION} | sed -e "s/\./_/g")
+        RELEASE="${REPOSITORY}_${VERSION_UB}"
+        echo "::set-output name=owner::$OWNER"
+        echo "::set-output name=repository::$REPOSITORY"
+        echo "::set-output name=version::$VERSION"
+        echo "::set-output name=version_hp::$VERSION_HP"
+        echo "::set-output name=version_ub::$VERSION_UB"
+        echo "::set-output name=release::$RELEASE"
