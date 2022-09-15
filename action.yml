@@ -38,7 +38,7 @@ runs:
         VERSION=$(echo ${{ github.ref }} | sed -e "s/refs\/tags\///g")
         VERSION_HP=$(echo ${VERSION} | sed -e "s/\./-/g")
         VERSION_UB=$(echo ${VERSION} | sed -e "s/\./_/g")
-        DATE=$(date "+%Y%m%d%H%M%S")
+        DATE=$(TZ="Asia/Tokyo" date "+%Y%m%d%H%M%S")
         RELEASE="${REPOSITORY}_${VERSION_UB}"
         RELEASE_DATE="${REPOSITORY}_${DATE}"
         echo "::set-output name=owner::$OWNER"
