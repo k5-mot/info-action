@@ -17,11 +17,14 @@ outputs:
   version_ub:
     description: "Version(Underbar) of repository"
     value: ${{ steps.info_repos.outputs.version_ub }}
+  date:
+    description: "Date of repository"
+    value: ${{ steps.info_repos.outputs.date }}
   release:
     description: "Name for release"
     value: ${{ steps.info_repos.outputs.release }}
   release_date:
-    description: "Name for release"
+    description: "Name for release with date"
     value: ${{ steps.info_repos.outputs.release_date }}
 
 runs: 
@@ -35,14 +38,15 @@ runs:
         VERSION=$(echo ${{ github.ref }} | sed -e "s/refs\/tags\///g")
         VERSION_HP=$(echo ${VERSION} | sed -e "s/\./-/g")
         VERSION_UB=$(echo ${VERSION} | sed -e "s/\./_/g")
-        RELEASE="${REPOSITORY}_${VERSION_UB}"
         DATE=$(date "+%Y%m%d%H%M%S")
+        RELEASE="${REPOSITORY}_${VERSION_UB}"
         RELEASE_DATE="${REPOSITORY}_${DATE}"
         echo "::set-output name=owner::$OWNER"
         echo "::set-output name=repository::$REPOSITORY"
         echo "::set-output name=version::$VERSION"
         echo "::set-output name=version_hp::$VERSION_HP"
         echo "::set-output name=version_ub::$VERSION_UB"
+        echo "::set-output name=date::$DATE"
         echo "::set-output name=release::$RELEASE"
         echo "::set-output name=release_date::$RELEASE_DATE"
 
