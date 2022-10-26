@@ -20,6 +20,9 @@ outputs:
   date:
     description: "Date of repository"
     value: ${{ steps.info_repos.outputs.date }}
+  date1:
+    description: "Date of repository"
+    value: ${{ steps.info_repos.outputs.date1 }}
   release:
     description: "Name for release"
     value: ${{ steps.info_repos.outputs.release }}
@@ -27,9 +30,9 @@ outputs:
     description: "Name for release with date"
     value: ${{ steps.info_repos.outputs.release_date }}
 
-runs: 
+runs:
   using: "composite"
-  steps: 
+  steps:
     - shell: bash
       id: info_repos
       run: |
@@ -39,6 +42,7 @@ runs:
         VERSION_HP=$(echo ${VERSION} | sed -e "s/\./-/g")
         VERSION_UB=$(echo ${VERSION} | sed -e "s/\./_/g")
         DATE=$(TZ="Asia/Tokyo" date "+%Y%m%d%H%M%S")
+        DATE1=$(TZ="Asia/Tokyo" date "+%Y/%m/%d (%a) %H:%M:%S")
         RELEASE="${REPOSITORY}_${VERSION_UB}"
         RELEASE_DATE="${REPOSITORY}_${DATE}"
         echo "::set-output name=owner::$OWNER"
@@ -47,6 +51,7 @@ runs:
         echo "::set-output name=version_hp::$VERSION_HP"
         echo "::set-output name=version_ub::$VERSION_UB"
         echo "::set-output name=date::$DATE"
+        echo "::set-output name=date1::$DATE1"
         echo "::set-output name=release::$RELEASE"
         echo "::set-output name=release_date::$RELEASE_DATE"
 
